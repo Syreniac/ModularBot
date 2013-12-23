@@ -1,0 +1,65 @@
+import multiprocessing
+
+
+class StormBot:
+	def __init__(self, jid, password, nick,server):
+		sleekxmpp.ClientXMPP.__init__(self, jid, password)
+		self.parent=parent
+		self.server=server
+		self.jid = jid
+		self.password = password
+		self.nick = nick
+		
+		self.register_plugin('xep_0030')	 # Service discovery.
+		self.register_plugin('xep_0045')	 # MUC support.
+		self.register_plugin('xep_0199')	 # XMPP Ping
+		
+		self.ssl_version = ssl.PROTOCOL_SSLv3
+		
+		print "StormBot checking in"
+
+		self.add_event_handler("groupchat_presence", self.updateJIDs)
+		self.add_event_handler("session_start", self.start)
+		
+		self.scheduler.add("Disconnect",3.0,self.disconnect,repeat=False)
+		
+	def updateJIDs(self,msg):
+		if msg["from"].split("/")[1].lower()=="syreniac":
+			channel=msg["from"].split("/")[0]
+			self.send_message(mto=channel,mbody="Syreniac",mtype="chat")
+		
+	def start(self,arg):
+		self.send_presence()
+		self.get_roster()
+		self.plugin['xep_0045'].joinMUC(self.channel, self.nick, wait=False)
+		
+	def disconnect(self):
+		self.disconnect()
+		
+class NickStorm:
+	def __init__(self,parent):
+		self.parent=parent
+		
+		self.messagable=True
+		self.trackable=True
+		self.active=True
+		
+	def help(self,admin):
+		if self.active:
+			return "!storm - pings koahi once in every room he's in\n"
+		return ""
+		
+	def message(self,msg)
+		if self.active:
+			if msg["body"].lower().startswith("!storm"):
+				self.make_bot(self.parent.jid,self.parent.password,self.parent.nick,"chat."+config.server)
+				
+	def make_bot(self,jid,password,nick,server):
+		sb=StormBot(jid,password,nick,server)
+		
+		if sb.connect((server,5222)):
+			print "Attempting to connect"
+			mb.process()
+		else:
+			print "Failed to connect."
+		
