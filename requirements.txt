@@ -1,0 +1,13 @@
+argparse==1.2.1
+httplib2==0.8
+oauth2==1.5.211
+oauthlib==0.6.0
+praw==2.1.11
+pylast==0.5.11
+python-twitter==1.1
+requests==2.1.0
+requests-oauthlib==0.4.0
+simplejson==3.3.1
+six==1.4.1
+update-checker==0.6
+wsgiref==0.1.2
